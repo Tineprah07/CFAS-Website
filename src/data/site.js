@@ -2,7 +2,13 @@ const site = {
   name: "Christ For All Schools Worldwide",
   shortName: "CFAS",
   founded: 2018,
+  denomination: "Non-denominational",
+  founder: "Apostle Samuel Faith",
   motto: "Living to make a positive difference globally",
+  mission:
+    "Populating heaven and depopulating hell, and empowering our generation on campuses and beyond for the work of ministry.",
+  vision:
+    "To make a positive difference in our generation by taking the gospel to every campus and establishing a fellowship on every campus, perfecting the saints for the work of ministry across the globe.",
 
   navLinks: [
     { label: "Home", href: "/" },
