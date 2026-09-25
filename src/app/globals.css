@@ -19,17 +19,85 @@
 
   /* Cream: light section backgrounds */
   --color-cream: #faf6ec;
+  --color-sand: #f3ede3;
+
+  /* Animations used across the site (animate-*) */
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.5s ease both;
+  --animate-ken-burns: ken-burns 14s ease-out both;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-spin-slow: spin 24s linear infinite;
+  --animate-pulse-ring: pulse-ring 4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  --animate-pop-in: pop-in 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes ken-burns {
+    from {
+      transform: scale(1.12);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(-14px) rotate(2deg);
+    }
+  }
+  @keyframes pulse-ring {
+    from {
+      transform: scale(0.6);
+      opacity: 0.7;
+    }
+    to {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
 
 /* Fonts come from next/font in layout.jsx, which sets these CSS variables. */
 @theme inline {
-  --font-sans: var(--font-inter);
-  --font-heading: var(--font-cinzel);
+  --font-sans: var(--font-dm-sans);
+  --font-heading: var(--font-dm-sans);
+  --font-display: var(--font-bebas);
+  --font-brand: var(--font-cinzel);
 }
 
 @layer base {
   body {
-    @apply bg-white font-sans text-charcoal;
+    @apply bg-cream font-sans text-charcoal;
   }
 
   h1,
@@ -38,6 +106,110 @@
   h4,
   h5,
   h6 {
-    @apply font-heading;
+    @apply font-heading tracking-tight;
+  }
+
+  ::selection {
+    @apply bg-gold/40;
+  }
+}
+
+/* Click ripple added by <Button>. */
+.ripple {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: currentColor;
+  opacity: 0.25;
+  transform: scale(0);
+  animation: ripple 0.6s ease-out forwards;
+}
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Hero dot progress; its end advances the carousel. */
+@keyframes hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Scroll reveal used by <Reveal>. */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero slide backgrounds, used when a slide has no photo. */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-color: #111;
+}
+.hero-bg--gold {
+  background:
+    radial-gradient(60% 80% at 75% 35%, rgb(212 175 55 / 0.45), transparent 70%),
+    radial-gradient(50% 60% at 15% 90%, rgb(139 26 26 / 0.55), transparent 70%),
+    linear-gradient(135deg, #0f1a2e 0%, #141414 60%, #0b0b0b 100%);
+}
+.hero-bg--crimson {
+  background:
+    radial-gradient(55% 70% at 70% 40%, rgb(139 26 26 / 0.75), transparent 70%),
+    radial-gradient(40% 50% at 20% 20%, rgb(212 175 55 / 0.25), transparent 70%),
+    linear-gradient(160deg, #1d0d0d 0%, #121212 70%);
+}
+.hero-bg--night {
+  background:
+    radial-gradient(50% 70% at 80% 30%, rgb(56 99 170 / 0.55), transparent 70%),
+    radial-gradient(45% 55% at 10% 80%, rgb(212 175 55 / 0.3), transparent 70%),
+    linear-gradient(180deg, #0c1424 0%, #0d0d0d 100%);
+}
+
+/* Film grain on dark surfaces. */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Hide the scrollbar on horizontal rails while keeping them scrollable. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
   }
 }
